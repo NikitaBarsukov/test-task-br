@@ -1,0 +1,43 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+repositories {
+    mavenCentral()
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+sourceSets.main.java.srcDirs "src/generated-sources/java"
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web-services'
+    compile("org.springframework:spring-web")
+    compile("com.fasterxml.jackson.core:jackson-databind")
+    compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-test'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+}
+
+bootRun() {
+
+}
+
+task start(dependsOn: jar) {
+    doLast {
+        ProcessBuilder pb = new ProcessBuilder(['cmd', '/c', 'start', 'gradlew.bat', 'bootRun'])
+        println "Starting bacendServer... "
+        Process proc = pb.start();
+        proc.waitFor();
+        println "Springboot is coming up now ... " + proc.exitValue()
+    }
+}

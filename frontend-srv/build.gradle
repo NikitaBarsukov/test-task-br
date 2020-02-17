@@ -1,0 +1,26 @@
+plugins {
+    id "com.moowork.node" version "1.2.0"
+}
+
+apply plugin: 'base'
+apply plugin: "com.moowork.node"
+
+node {
+    version = "10.15.0"
+    download = true
+}
+
+task bundle(type: NpmTask, dependsOn: npmInstall) {
+    args = ['run', 'build']
+}
+
+task bootstrap(type: NpmTask, dependsOn: bundle) {
+    args = ['install','react-bootstrap', 'bootstrap']
+}
+
+task start(type: NpmTask, dependsOn: bootstrap,) {
+    args = ['start']
+}
+
+assemble.dependsOn(bundle)
+
